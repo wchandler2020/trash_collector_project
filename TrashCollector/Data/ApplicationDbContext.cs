@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using TrashCollector.Models;
 
 namespace TrashCollector.Data
 {
@@ -24,7 +25,10 @@ namespace TrashCollector.Data
                       Name = "Admin",
                       NormalizedName = "ADMIN"
                   }
-          );
+          );  
         }
+        public DbSet<Customer> customers { get; set; }
+        public DbSet<Employee> employees { get; set; }
+        public DbSet<Address> addresses { get; set; }
     }
 }
