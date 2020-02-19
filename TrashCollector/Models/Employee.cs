@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -17,8 +18,9 @@ namespace TrashCollector.Models
         [Display(Name = "FIrst Name")]
         [Required]
         public string LastName { get; set; }
-        [Required]
-        [ForeignKey("Address")]
-        public Address addresses { get; set; }
+        public string ZipCode { get; set; }
+        [ForeignKey("identityUser")]
+        public string IdentityUserId { get; set; }
+        public IdentityUser identityUser { get; set; }
     }
 }

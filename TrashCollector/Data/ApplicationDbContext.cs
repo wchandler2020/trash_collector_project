@@ -14,6 +14,9 @@ namespace TrashCollector.Data
             : base(options)
         {
         }
+        public DbSet<Customer> customers { get; set; }
+        public DbSet<Employee> employees { get; set; }
+        public DbSet<Address> addresses { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -24,11 +27,19 @@ namespace TrashCollector.Data
                   {
                       Name = "Admin",
                       NormalizedName = "ADMIN"
+                  },
+                  new IdentityRole
+                  {
+                      Name = "Employee",
+                      NormalizedName = "EMPLOYEE"
+                  },
+                  new IdentityRole
+                  {
+                      Name = "Customer",
+                      NormalizedName = "CUSTOMER"
                   }
-          );  
+            );
         }
-        public DbSet<Customer> customers { get; set; }
-        public DbSet<Employee> employees { get; set; }
-        public DbSet<Address> addresses { get; set; }
+       
     }
 }
