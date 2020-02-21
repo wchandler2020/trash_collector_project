@@ -64,10 +64,11 @@ namespace TrashCollector.Areas.Identity.Pages.Account
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            public string ConfirmPassword { get; set; }
 
             [Required]
             public string Role { get; set; }
-            public string ConfirmPassword { get; set; }
+            
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -91,6 +92,15 @@ namespace TrashCollector.Areas.Identity.Pages.Account
                     if (await _roleManager.RoleExistsAsync(Input.Role))
                     {
                         await _userManager.AddToRoleAsync(user, Input.Role);
+
+                        if (Input.Role == "Customer")
+                        {
+                            return RedirectToAction("Create", "Customers");
+                        }
+                        else
+                        {
+                            return RedirectToAction("Create", "Employees");
+                        }
                     }
                     _logger.LogInformation("User created a new account with password.");
 

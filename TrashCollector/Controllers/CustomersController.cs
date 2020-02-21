@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -22,7 +23,9 @@ namespace TrashCollector.Controllers
         // GET: Customers
         public async Task<IActionResult> Index()
         {
-            return View(await _context.customers.ToListAsync());
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // will give the user's userId
+            var userName = User.FindFirstValue(ClaimTypes.Name);
+            return View(await _context.Customers.ToListAsync());
         }
 
         // GET: Customers/Details/5
@@ -33,7 +36,7 @@ namespace TrashCollector.Controllers
                 return NotFound();
             }
 
-            var customer = await _context.customers
+            var customer = await _context.Customers
                 .FirstOrDefaultAsync(m => m.CustomerId == id);
             if (customer == null)
             {
@@ -54,7 +57,7 @@ namespace TrashCollector.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CustomerId,FirstName,LastName")] Customer customer)
+        public async Task<IActionResult> Create([Bind("CustomerId,FirstName,LastName,Address,Zipcode,City,State")] Customer customer)
         {
             if (ModelState.IsValid)
             {
@@ -73,7 +76,7 @@ namespace TrashCollector.Controllers
                 return NotFound();
             }
 
-            var customer = await _context.customers.FindAsync(id);
+            var customer = await _context.Customers.FindAsync(id);
             if (customer == null)
             {
                 return NotFound();
@@ -86,7 +89,7 @@ namespace TrashCollector.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CustomerId,FirstName,LastName")] Customer customer)
+        public async Task<IActionResult> Edit(int id, [Bind("CustomerId,FirstName,LastName,Address,Zipcode,City,State")] Customer customer)
         {
             if (id != customer.CustomerId)
             {
@@ -124,7 +127,7 @@ namespace TrashCollector.Controllers
                 return NotFound();
             }
 
-            var customer = await _context.customers
+            var customer = await _context.Customers
                 .FirstOrDefaultAsync(m => m.CustomerId == id);
             if (customer == null)
             {
@@ -139,15 +142,15 @@ namespace TrashCollector.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var customer = await _context.customers.FindAsync(id);
-            _context.customers.Remove(customer);
+            var customer = await _context.Customers.FindAsync(id);
+            _context.Customers.Remove(customer);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool CustomerExists(int id)
         {
-            return _context.customers.Any(e => e.CustomerId == id);
+            return _context.Customers.Any(e => e.CustomerId == id);
         }
     }
 }

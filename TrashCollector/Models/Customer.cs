@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -10,20 +9,27 @@ namespace TrashCollector.Models
 {
     public class Customer
     {
+
         [Key]
         public int CustomerId { get; set; }
         [Required]
         public string FirstName { get; set; }
         [Required]
         public string LastName { get; set; }
+        [Required]
+        public string Address { get; set; }
+        [Required]
+        public string Zipcode { get; set; }
+        [Required]
+        public string City { get; set; }
+        [Required]
+        public string State { get; set; }
 
-        [ForeignKey("identityUser")]
-        public string IdentityUserId { get; set; }
-        public IdentityUser identityUser { get; set; }
-
-        [ForeignKey("Address")]
-        [Display(Name = "Address")]
-        public int AddressId { get; set; }
-        public Address addresses { get; set; }   
+        [Display(Name = "Please Choose your pickup date.")]
+        [DataType(DataType.Date)]
+        public DateTime StartDate { get; set; } 
+        public string DayOfWeek { get; set; }
+        [DataType(DataType.Currency)]
+        public double BillAmount { get; set; }
     }
 }
