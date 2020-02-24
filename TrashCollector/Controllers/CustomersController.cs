@@ -25,7 +25,8 @@ namespace TrashCollector.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // will give the user's userId
             var userName = User.FindFirstValue(ClaimTypes.Name);
-            return View(await _context.Customers.ToListAsync());
+            var customer = await _context.Customers.Where(c => c.IdentityUserId == userId).ToListAsync();
+            return View(customer);
         }
 
         // GET: Customers/Details/5
@@ -35,7 +36,6 @@ namespace TrashCollector.Controllers
             {
                 return NotFound();
             }
-
             var customer = await _context.Customers
                 .FirstOrDefaultAsync(m => m.CustomerId == id);
             if (customer == null)
@@ -57,10 +57,12 @@ namespace TrashCollector.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CustomerId,FirstName,LastName,Address,Zipcode,City,State")] Customer customer)
+        public async Task<IActionResult> Create(Customer customer)
         {
             if (ModelState.IsValid)
             {
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                customer.IdentityUserId = userId;
                 _context.Add(customer);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -69,7 +71,7 @@ namespace TrashCollector.Controllers
         }
 
         // GET: Customers/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
             if (id == null)
             {
@@ -89,8 +91,10 @@ namespace TrashCollector.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CustomerId,FirstName,LastName,Address,Zipcode,City,State")] Customer customer)
+        public async Task<IActionResult> Edit(int id, Customer customer)
         {
+            var newCustomer = _context.Customers.Find(id);
+
             if (id != customer.CustomerId)
             {
                 return NotFound();
@@ -100,8 +104,19 @@ namespace TrashCollector.Controllers
             {
                 try
                 {
-                    _context.Update(customer);
-                    await _context.SaveChangesAsync();
+                    newCustomer.FirstName = customer.FirstName;
+                    newCustomer.LastName = customer.LastName;
+                    newCustomer.Address = customer.Address;
+                    newCustomer.Zipcode = customer.Zipcode;
+                    newCustomer.DayOfWeek = customer.DayOfWeek;
+                    newCustomer.City = customer.City;
+                    newCustomer.State = customer.State;
+                    newCustomer.StartDate = customer.StartDate;
+                    newCustomer.EndDate = customer.EndDate;
+
+                    _context.Entry(newCustomer).State = EntityState.Modified;
+                    _context.SaveChanges();
+                    return RedirectToAction("Index");
                 }
                 catch (DbUpdateConcurrencyException)
                 {

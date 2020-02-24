@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -24,12 +25,19 @@ namespace TrashCollector.Models
         public string City { get; set; }
         [Required]
         public string State { get; set; }
-
-        [Display(Name = "Please Choose your pickup date.")]
+        public double Balance { get; set; }
+        public bool AccountActive { get; set; }
+        public DateTime PickupDate { get; set; }
         [DataType(DataType.Date)]
-        public DateTime StartDate { get; set; } 
+        [DisplayFormat(DataFormatString = "{yyyy-MM-dd} Please Choose your pickup date.")]
+        public DateTime StartDate { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime EndDate { get; set; }
         public string DayOfWeek { get; set; }
         [DataType(DataType.Currency)]
-        public double BillAmount { get; set; }
+        public double InvoiceAmount { get; set; }
+        [ForeignKey("identityUser")]
+        public string IdentityUserId { get; set; }
+        public IdentityUser identityUser { get; set; }
     }
 }

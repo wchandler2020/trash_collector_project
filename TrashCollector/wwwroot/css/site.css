@@ -51,6 +51,12 @@ button.accept-policy {
   line-height: inherit;
 }
 
+.welcome{
+    background: url(../images/image11.jpg) !important;
+    height: 100vh ;
+    width: 100%;
+}
+
 /* Sticky footer styles
 -------------------------------------------------- */
 html {

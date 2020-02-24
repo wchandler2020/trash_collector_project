@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
+<h1 class="text-center m-5">Details</h1>
 
 <div>
     <h4>Customer</h4>
@@ -47,13 +47,28 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.State)
         </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.StartDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.StartDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.EndDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.EndDate)
+        </dd>
     </dl>
     <h4>Billing Information</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.BillAmount)
+            @Html.DisplayNameFor(model => model.InvoiceAmount)
         </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.InvoiceAmount)
+        </dd>
     </dl>
 </div>
 <div>

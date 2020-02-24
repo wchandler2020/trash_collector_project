@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -22,7 +23,10 @@ namespace TrashCollector.Controllers
         // GET: Employees
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Employees.ToListAsync());
+            var employeeId = User.FindFirstValue(ClaimTypes.NameIdentifier); // will give the user's userId
+            var employeeName = User.FindFirstValue(ClaimTypes.Name);
+            var employee = await _context.Employees.Where(e => e.IdentityUserId == employeeId).ToListAsync();
+            return View(employee);
         }
 
         // GET: Employees/Details/5
@@ -54,10 +58,13 @@ namespace TrashCollector.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EmployeeId,FirstName,LastName")] Employee employee)
+        public async Task<IActionResult> Create(Employee employee)
         {
             if (ModelState.IsValid)
             {
+
+                var employeeId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                employee.IdentityUserId = employeeId;
                 _context.Add(employee);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -86,8 +93,9 @@ namespace TrashCollector.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EmployeeId,FirstName,LastName")] Employee employee)
+        public async Task<IActionResult> Edit(int id, Employee employee)
         {
+            var editEmployee = _context.Employees.Find(id);
             if (id != employee.EmployeeId)
             {
                 return NotFound();
@@ -99,6 +107,14 @@ namespace TrashCollector.Controllers
                 {
                     _context.Update(employee);
                     await _context.SaveChangesAsync();
+
+                    editEmployee.FirstName = employee.FirstName;
+                    editEmployee.LastName = employee.LastName;
+                    editEmployee.ZipCode = employee.ZipCode;
+
+                    _context.Entry(editEmployee).State = EntityState.Modified;
+                    _context.SaveChanges();
+                    return RedirectToAction("Index");
                 }
                 catch (DbUpdateConcurrencyException)
                 {

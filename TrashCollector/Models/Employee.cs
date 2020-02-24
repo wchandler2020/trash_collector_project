@@ -15,7 +15,7 @@ namespace TrashCollector.Models
         [Display(Name = "FIrst Name")]
         [Required]
         public string FirstName { get; set; }
-        [Display(Name = "FIrst Name")]
+        [Display(Name = "Last Name")]
         [Required]
         public string LastName { get; set; }
         public string ZipCode { get; set; }

@@ -95,10 +95,12 @@ namespace TrashCollector.Areas.Identity.Pages.Account
 
                         if (Input.Role == "Customer")
                         {
+                            await _signInManager.SignInAsync(user, isPersistent: false);
                             return RedirectToAction("Create", "Customers");
                         }
                         else
                         {
+                            await _signInManager.SignInAsync(user, isPersistent: false);
                             return RedirectToAction("Create", "Employees");
                         }
                     }

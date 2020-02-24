@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TrashCollector.Data;
 
 namespace TrashCollector.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200221155152_AddForiegnKeyForCustomer")]
+    partial class AddForiegnKeyForCustomer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,22 +50,22 @@ namespace TrashCollector.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "be849d0d-d832-4abc-ad91-9e0445a63ceb",
-                            ConcurrencyStamp = "965472b3-ad6d-4e0b-8f8d-9d5a352ea80d",
+                            Id = "2543a3c7-1d90-4a20-b832-9fb3949d8adc",
+                            ConcurrencyStamp = "311032e1-7519-4a31-aabc-b21e28e49e6d",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "5f95bc3c-3efc-44fc-b36a-1b1b5b48b574",
-                            ConcurrencyStamp = "80d9aaab-27a4-4143-98f1-cf777aaadf92",
+                            Id = "5d304068-39a5-403b-abe1-210ba2db3843",
+                            ConcurrencyStamp = "2f4ea752-2732-4065-83a2-d37123299770",
                             Name = "Employee",
                             NormalizedName = "EMPLOYEE"
                         },
                         new
                         {
-                            Id = "90ff431d-9267-44da-b5ce-c3b5ecc9ee4a",
-                            ConcurrencyStamp = "63552075-a511-4495-9f1f-be20ac9ab868",
+                            Id = "b7936bcc-1833-42e4-a12f-b4c268f66c55",
+                            ConcurrencyStamp = "3a2d46d3-3c60-442f-80f8-790556d4c5c9",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         });
@@ -245,15 +247,9 @@ namespace TrashCollector.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<bool>("AccountActive")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("Balance")
-                        .HasColumnType("float");
 
                     b.Property<string>("City")
                         .IsRequired()
@@ -261,9 +257,6 @@ namespace TrashCollector.Migrations
 
                     b.Property<string>("DayOfWeek")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -278,9 +271,6 @@ namespace TrashCollector.Migrations
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("PickupDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
