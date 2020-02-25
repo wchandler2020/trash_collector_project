@@ -93,12 +93,12 @@ namespace TrashCollector.Controllers
                 return NotFound();
             }
 
-            var employee = await _context.Customers.FindAsync(id);
+            var customer1 = await _context.Customers.FindAsync(id);
             if (customer == null)
             {
                 return NotFound();
             }
-            return View(customer);
+            return View(customer1);
         }
 
         // POST: Employees/Edit/5
@@ -109,7 +109,7 @@ namespace TrashCollector.Controllers
         public async Task<IActionResult> Edit(int id, Customer customer)
         {
             var editMyCustomer = _context.Customers.Find(id);
-            if (id != customer.CustomerId)
+            if (id != editMyCustomer.CustomerId)
             {
                 return NotFound();
             }
@@ -118,9 +118,6 @@ namespace TrashCollector.Controllers
             {
                 try
                 {
-                    _context.Update(customer);
-                    await _context.SaveChangesAsync();
-
                     editMyCustomer.Balance = customer.Balance;
                     editMyCustomer.FirstName = customer.FirstName;
                     editMyCustomer.LastName = customer.LastName;
@@ -152,7 +149,7 @@ namespace TrashCollector.Controllers
             Customer customer = _context.Customers.Find(id);
             customer.Balance += 50;
             _context.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Employees/Delete/5
