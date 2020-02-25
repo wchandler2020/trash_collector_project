@@ -27,7 +27,7 @@ a {
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
-  font-size: 14px;
+  font-size: 16px;
 }
 @media (min-width: 768px) {
   html {
@@ -52,7 +52,7 @@ button.accept-policy {
 }
 
 .container{
-    background: url(../images/image11.jpg) !important;
+    background: url('../images/image11.jpg') !important;
     height: 100vh ;
     width: 100%;
 }
@@ -65,8 +65,9 @@ html {
 }
 
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
+    background-image: url('../images/image11.jpg');
 }
 .footer {
   position: absolute;

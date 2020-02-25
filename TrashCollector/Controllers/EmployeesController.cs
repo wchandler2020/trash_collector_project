@@ -125,6 +125,7 @@ namespace TrashCollector.Controllers
                     editMyCustomer.FirstName = customer.FirstName;
                     editMyCustomer.LastName = customer.LastName;
 
+
                     _context.Entry(editMyCustomer).State = EntityState.Modified;
                     _context.SaveChanges();
                     return RedirectToAction("Index");
