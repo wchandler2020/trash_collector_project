@@ -29,7 +29,6 @@ namespace TrashCollector.Models
         public bool AccountActive { get; set; }
         public DateTime PickupDate { get; set; }
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{yyyy-MM-dd} Please Choose your pickup date.")]
         public DateTime StartDate { get; set; }
         [DataType(DataType.Date)]
         public DateTime EndDate { get; set; }

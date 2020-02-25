@@ -24,11 +24,23 @@ namespace TrashCollector.Controllers
         public async Task<IActionResult> Index()
         {
             var employeeId = User.FindFirstValue(ClaimTypes.NameIdentifier); // will give the user's userId
-            var employeeName = User.FindFirstValue(ClaimTypes.Name);
-            var employee = await _context.Employees.Where(e => e.IdentityUserId == employeeId).ToListAsync();
-            return View(employee);
+            var employee = _context.Employees.Where(e => e.IdentityUserId == employeeId).FirstOrDefault();
+
+            var customer = _context.Customers
+               .Where(c => c.Zipcode == employee.ZipCode).ToList();
+              return View(customer);
         }
 
+        //Sort by Day of Week
+        public async Task<IActionResult> IndexDays()
+        {
+            var employeeId = User.FindFirstValue(ClaimTypes.NameIdentifier); // will give the user's userId
+            var employee = _context.Employees.Where(e => e.IdentityUserId == employeeId).FirstOrDefault();
+
+            var customer = _context.Customers
+               .Where(c => c.DayOfWeek == DateTime.Today.DayOfWeek.ToString());
+            return View(customer);
+        }
         // GET: Employees/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -65,27 +77,28 @@ namespace TrashCollector.Controllers
 
                 var employeeId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 employee.IdentityUserId = employeeId;
+
                 _context.Add(employee);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index","Employees");
             }
             return View(employee);
         }
 
         // GET: Employees/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id, Customer customer)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var employee = await _context.Employees.FindAsync(id);
-            if (employee == null)
+            var employee = await _context.Customers.FindAsync(id);
+            if (customer == null)
             {
                 return NotFound();
             }
-            return View(employee);
+            return View(customer);
         }
 
         // POST: Employees/Edit/5
@@ -93,10 +106,10 @@ namespace TrashCollector.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Employee employee)
+        public async Task<IActionResult> Edit(int id, Customer customer)
         {
-            var editEmployee = _context.Employees.Find(id);
-            if (id != employee.EmployeeId)
+            var editMyCustomer = _context.Customers.Find(id);
+            if (id != customer.CustomerId)
             {
                 return NotFound();
             }
@@ -105,20 +118,20 @@ namespace TrashCollector.Controllers
             {
                 try
                 {
-                    _context.Update(employee);
+                    _context.Update(customer);
                     await _context.SaveChangesAsync();
 
-                    editEmployee.FirstName = employee.FirstName;
-                    editEmployee.LastName = employee.LastName;
-                    editEmployee.ZipCode = employee.ZipCode;
+                    editMyCustomer.Balance = customer.Balance;
+                    editMyCustomer.FirstName = customer.FirstName;
+                    editMyCustomer.LastName = customer.LastName;
 
-                    _context.Entry(editEmployee).State = EntityState.Modified;
+                    _context.Entry(editMyCustomer).State = EntityState.Modified;
                     _context.SaveChanges();
                     return RedirectToAction("Index");
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!EmployeeExists(employee.EmployeeId))
+                    if (!EmployeeExists(customer.CustomerId))
                     {
                         return NotFound();
                     }
@@ -129,7 +142,16 @@ namespace TrashCollector.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(employee);
+            return View(customer);
+        }
+
+        public ActionResult ConfirmPickup(int id)
+        {
+            
+            Customer customer = _context.Customers.Find(id);
+            customer.Balance += 50;
+            _context.SaveChanges();
+            return RedirectToAction("Index");
         }
 
         // GET: Employees/Delete/5
